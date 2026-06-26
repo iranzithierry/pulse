@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Instant Football",
+  title: "Pulse - Live Streams",
   description: "Browse live sports events and open stream servers",
 };
 

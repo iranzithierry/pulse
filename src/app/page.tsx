@@ -1,10 +1,11 @@
 "use client";
 
-import { LoaderCircle, TvMinimal } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { EventList } from "@/components/event-list";
 import { StreamPanel } from "@/components/stream-panel";
 import type { StreamEvent, StreamServer } from "@/lib/types";
+import Image from "next/image";
 
 export default function Home() {
   const [events, setEvents] = useState<StreamEvent[]>([]);
@@ -72,12 +73,12 @@ export default function Home() {
     <div className="min-h-screen bg-zinc-100">
       <header className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-4 sm:px-6">
-          <div className="flex size-9 items-center justify-center rounded-md bg-zinc-900 text-white">
-            <TvMinimal className="size-4" />
+          <div className="flex items-center justify-center">
+            <Image src="/logo.png" className="size-10" alt="Pulse" width={42} height={42} />
           </div>
           <div>
             <h1 className="text-lg font-semibold tracking-tight text-zinc-900">
-              Instant Football
+              Pulse - Live Streams
             </h1>
             <p className="text-xs text-zinc-500">
               Browse live matches and open stream servers
