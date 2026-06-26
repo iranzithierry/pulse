@@ -33,7 +33,7 @@ export function EventList({
   }, [events, query]);
 
   return (
-    <section className="flex h-full flex-col border border-zinc-200 bg-white">
+    <section className="flex h-full min-w-0 flex-col border border-zinc-200 bg-white">
       <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
         <div>
           <h2 className="text-sm font-semibold text-zinc-900">Live events</h2>
@@ -77,7 +77,7 @@ export function EventList({
                   <button
                     type="button"
                     onClick={() => onSelect(event)}
-                    className={`flex w-full items-center gap-3 px-4 py-3 text-left transition ${
+                    className={`flex w-full min-w-0 items-center gap-3 px-4 py-3 text-left transition ${
                       selected
                         ? "bg-zinc-100"
                         : "hover:bg-zinc-50"
@@ -90,12 +90,12 @@ export function EventList({
                       }}
                     />
                     <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="truncate text-sm font-medium text-zinc-900">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <p className="min-w-0 flex-1 truncate text-sm font-medium text-zinc-900">
                           {event.name}
-                        </span>
+                        </p>
                         {event.isLive ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-red-700">
+                          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-red-700">
                             <Radio className="size-3" />
                             Live
                           </span>
