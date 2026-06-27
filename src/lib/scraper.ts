@@ -35,6 +35,12 @@ function extractTeamColor(style: string | undefined): string | undefined {
   return match?.[1]?.trim();
 }
 
+function extractStreamIdFromEmbedUrl(src: string | undefined): string | undefined {
+  if (!src) return undefined;
+  const match = src.match(/new-stream-embed\/(\d+)/);
+  return match?.[1];
+}
+
 export async function scrapeEvents(
   sourceUrl = SOURCE_BASE_URL,
 ): Promise<StreamEvent[]> {
@@ -108,6 +114,22 @@ export async function scrapeStreamServers(
       });
     },
   );
+
+  if (servers.length === 0) {
+    const iframeSrc =
+      $("#wp_player").attr("src") ??
+      $(".embed-responsive iframe.embed-responsive-item").attr("src");
+    const id = extractStreamIdFromEmbedUrl(iframeSrc);
+
+    if (id) {
+      servers.push({
+        id,
+        label: `Server 1`,
+        isActive: true,
+        embedUrl: `${EMBED_BASE_URL}/${id}?ad=111`,
+      });
+    }
+  }
 
   const unique = new Map<string, StreamServer>();
   for (const server of servers) {

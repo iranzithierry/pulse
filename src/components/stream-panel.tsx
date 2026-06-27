@@ -15,6 +15,7 @@ type StreamPanelProps = {
 	loading: boolean;
 	error: string | null;
 	onBack: () => void;
+	variant?: "panel" | "dialog";
 };
 
 export function StreamPanel({
@@ -23,10 +24,15 @@ export function StreamPanel({
 	loading,
 	error,
 	onBack,
+	variant = "panel",
 }: StreamPanelProps) {
+	const sectionClassName =
+		variant === "dialog"
+			? "flex w-full min-h-0 flex-1 flex-col bg-white"
+			: "flex h-full flex-col border border-zinc-200 bg-white";
 	if (!event) {
 		return (
-			<section className="flex h-full flex-col items-center justify-center border border-zinc-200 bg-zinc-50 px-6 text-center">
+			<section className="flex w-full h-full flex-col items-center justify-center border border-zinc-200 bg-zinc-50 px-6 text-center">
 				<MonitorPlay className="mb-3 size-10 text-zinc-300" />
 				<h2 className="text-sm font-semibold text-zinc-900">Select a match</h2>
 				<p className="mt-1 max-w-sm text-sm text-zinc-500">
@@ -37,8 +43,10 @@ export function StreamPanel({
 	}
 
 	return (
-		<section className="flex h-full flex-col border border-zinc-200 bg-white">
-			<div className="border-b border-zinc-200 px-4 py-3">
+		<section className={sectionClassName}>
+			<div
+				className={`border-b border-zinc-200 py-3 ${variant === "dialog" ? "px-4 sm:px-6" : "px-4"}`}
+			>
 				<button
 					type="button"
 					onClick={onBack}
@@ -51,7 +59,9 @@ export function StreamPanel({
 				<p className="mt-0.5 text-xs text-zinc-500">{event.category}</p>
 			</div>
 
-			<div className="min-h-0 flex-1 overflow-y-auto p-4">
+			<div
+				className={`min-h-0 flex-1 overflow-y-auto ${variant === "dialog" ? "px-4 py-4 sm:px-6" : "p-4"}`}
+			>
 				{loading ? (
 					<div className="flex items-center justify-center gap-2 py-16 text-sm text-zinc-500">
 						<LoaderCircle className="size-4 animate-spin" />
@@ -75,20 +85,18 @@ export function StreamPanel({
 								target="_blank"
 								href={server.embedUrl}
 								key={server.id}
-								className="flex w-full items-center justify-between rounded-md border border-zinc-200 px-4 py-3 text-left transition hover:border-zinc-400 hover:bg-zinc-50"
+								className="flex w-full items-center gap-3 rounded-md border border-zinc-200 px-4 py-3 text-left transition hover:border-zinc-400 hover:bg-zinc-50"
 							>
-								<div className="flex items-center gap-3">
-									<span className="flex size-8 items-center justify-center rounded-md bg-zinc-100 text-zinc-600">
-										<Server className="size-4" />
-									</span>
-									<div>
-										<p className="text-sm font-medium text-zinc-900">
-											{server.label}
-										</p>
-										<p className="text-xs text-zinc-500">ID {server.id}</p>
-									</div>
+								<span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-zinc-600">
+									<Server className="size-4" />
+								</span>
+								<div className="min-w-0 flex-1">
+									<p className="truncate text-sm font-medium text-zinc-900">
+										{server.label}
+									</p>
+									<p className="text-xs text-zinc-500">ID {server.id}</p>
 								</div>
-								<div className="flex items-center gap-2">
+								<div className="flex shrink-0 items-center gap-2">
 									{server.isActive ? (
 										<span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
 											Active

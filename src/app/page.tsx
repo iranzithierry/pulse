@@ -3,6 +3,7 @@
 import { LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { EventList } from "@/components/event-list";
+import { StreamDialog } from "@/components/stream-dialog";
 import { StreamPanel } from "@/components/stream-panel";
 import type { StreamEvent, StreamServer } from "@/lib/types";
 import Image from "next/image";
@@ -69,6 +70,12 @@ export default function Home() {
     void loadEvents();
   }, [loadEvents]);
 
+  const clearSelection = useCallback(() => {
+    setSelectedEvent(null);
+    setServers([]);
+    setServersError(null);
+  }, []);
+
   return (
     <div className="min-h-screen bg-zinc-100">
       <header className="border-b border-zinc-200 bg-white">
@@ -108,20 +115,27 @@ export default function Home() {
               onSelect={loadServers}
               onRefresh={loadEvents}
             />
-            <StreamPanel
-              event={selectedEvent}
-              servers={servers}
-              loading={serversLoading}
-              error={serversError}
-              onBack={() => {
-                setSelectedEvent(null);
-                setServers([]);
-                setServersError(null);
-              }}
-            />
+            <div className="hidden min-h-0 lg:flex lg:flex-col">
+              <StreamPanel
+                event={selectedEvent}
+                servers={servers}
+                loading={serversLoading}
+                error={serversError}
+                onBack={clearSelection}
+              />
+            </div>
           </div>
         )}
       </main>
+
+      <StreamDialog
+        open={selectedEvent !== null}
+        event={selectedEvent}
+        servers={servers}
+        loading={serversLoading}
+        error={serversError}
+        onClose={clearSelection}
+      />
     </div>
   );
 }

@@ -77,11 +77,10 @@ export function EventList({
                   <button
                     type="button"
                     onClick={() => onSelect(event)}
-                    className={`flex w-full min-w-0 items-center gap-3 px-4 py-3 text-left transition ${
-                      selected
+                    className={`flex cursor-pointer w-full min-w-0 items-center gap-3 px-4 py-3 text-left transition ${selected
                         ? "bg-zinc-100"
-                        : "hover:bg-zinc-50"
-                    }`}
+                        : "hover:bg-zinc-100"
+                      }`}
                   >
                     <span
                       className="mt-0.5 size-2.5 shrink-0 rounded-full"
@@ -89,7 +88,7 @@ export function EventList({
                         backgroundColor: event.teamColor ?? "#71717a",
                       }}
                     />
-                    <div className="min-w-0 flex-1">
+                    <div className="min-w-0 flex-1 space-y-1">
                       <div className="flex min-w-0 items-center gap-2">
                         <p className="min-w-0 flex-1 truncate text-sm font-medium text-zinc-900">
                           {event.name}
@@ -101,10 +100,15 @@ export function EventList({
                           </span>
                         ) : null}
                       </div>
-                      <p className="truncate text-xs text-zinc-500">
-                        {event.category}
-                        {event.timeLabel ? ` · ${event.timeLabel}` : ""}
-                      </p>
+                      <div className="flex items-center gap-1">
+                        <p className="truncate text-xs text-zinc-500">
+                          {event.category}
+                        </p>
+                        <span className="text-xs text-zinc-500">·</span>
+                        {event.timeLabel ? <span className="inline-flex shrink-0 items-center rounded-full bg-gray-200 px-2 py-0.2 text-[10px] text-gray-700">
+                          {`${event.timeLabel}`}
+                        </span> : ""}
+                      </div>
                     </div>
                     <ChevronRight className="size-4 shrink-0 text-zinc-400" />
                   </button>
