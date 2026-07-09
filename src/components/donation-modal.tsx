@@ -1,6 +1,6 @@
 "use client";
 
-import { Bitcoin, Check, Copy, Heart, ShieldCheck, X, Zap } from "lucide-react";
+import { Bitcoin, Check, Copy, Heart, X } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -16,10 +16,9 @@ type CryptoAsset = {
 	ticker: string;
 	network: string;
 	address: string;
-	accent: string;
-	glow: string;
+	iconBg: string;
+	iconColor: string;
 	logo: React.ReactNode;
-	qrColor: string;
 };
 
 const ASSETS: CryptoAsset[] = [
@@ -29,10 +28,9 @@ const ASSETS: CryptoAsset[] = [
 		ticker: "BTC",
 		network: "Bitcoin Network",
 		address: "bc1qcx056sfht77gmp6uzvcx34e3ewqka04kyjrl2m",
-		accent: "from-amber-400 to-orange-500",
-		glow: "shadow-[0_0_40px_-8px_rgba(251,146,60,0.55)]",
-		logo: <Bitcoin className="size-5" />,
-		qrColor: "#f59e0b",
+		iconBg: "bg-amber-50",
+		iconColor: "text-amber-600",
+		logo: <Bitcoin className="size-4" />,
 	},
 	{
 		id: "usdt",
@@ -40,10 +38,9 @@ const ASSETS: CryptoAsset[] = [
 		ticker: "USDT",
 		network: "Ethereum (ERC-20)",
 		address: "0x460eBF24894C2Afb592984b0bBCF0482f04e96cA",
-		accent: "from-emerald-400 to-teal-500",
-		glow: "shadow-[0_0_40px_-8px_rgba(16,185,129,0.55)]",
+		iconBg: "bg-emerald-50",
+		iconColor: "text-emerald-600",
 		logo: <UsdtGlyph />,
-		qrColor: "#10b981",
 	},
 ];
 
@@ -51,7 +48,7 @@ function UsdtGlyph() {
 	return (
 		<svg
 			viewBox="0 0 24 24"
-			className="size-5"
+			className="size-4"
 			fill="currentColor"
 			aria-hidden
 		>
@@ -81,7 +78,7 @@ export function DonationModal({ open, onClose }: DonationModalProps) {
 			return () => cancelAnimationFrame(raf);
 		}
 		setIsEntering(false);
-		closeTimerRef.current = setTimeout(() => setIsVisible(false), 220);
+		closeTimerRef.current = setTimeout(() => setIsVisible(false), 180);
 		return () => {
 			if (closeTimerRef.current) {
 				clearTimeout(closeTimerRef.current);
@@ -112,143 +109,93 @@ export function DonationModal({ open, onClose }: DonationModalProps) {
 			role="dialog"
 			aria-modal="true"
 			aria-labelledby="donation-modal-title"
+			aria-describedby="donation-modal-description"
 		>
 			<button
 				type="button"
 				aria-label="Close donation dialog"
 				onClick={onClose}
-				className={`absolute inset-0 cursor-default bg-black/70 backdrop-blur-md transition-opacity duration-200 ease-out ${
+				className={`absolute inset-0 cursor-default bg-black/50 transition-opacity duration-150 ease-out ${
 					isEntering ? "opacity-100" : "opacity-0"
 				}`}
 			/>
 
 			<div
-				className={`relative flex max-h-[calc(100dvh-2rem)] w-full max-w-md flex-col transition-all duration-300 ease-out sm:max-h-[calc(100dvh-3rem)] ${
+				className={`relative flex max-h-[calc(100dvh-2rem)] w-full max-w-md flex-col overflow-hidden rounded-lg border border-zinc-200 bg-white text-zinc-900 shadow-lg transition-all duration-200 ease-out sm:max-h-[calc(100dvh-3rem)] ${
 					isEntering
 						? "translate-y-0 scale-100 opacity-100"
-						: "translate-y-4 scale-95 opacity-0"
+						: "translate-y-2 scale-[0.98] opacity-0"
 				}`}
 			>
-				<div
-					aria-hidden
-					className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-amber-400 via-fuchsia-500 to-emerald-400 opacity-70 blur-[6px]"
-				/>
-				<div
-					aria-hidden
-					className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-amber-400 via-fuchsia-500 to-emerald-400 opacity-90"
-				/>
+				<button
+					type="button"
+					onClick={onClose}
+					aria-label="Close"
+					className="absolute right-3 top-3 z-10 inline-flex size-7 items-center justify-center rounded-md text-zinc-500 opacity-70 transition-opacity hover:bg-zinc-100 hover:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-300"
+				>
+					<X className="size-4" />
+				</button>
 
-				<div className="relative flex min-h-0 flex-col overflow-hidden rounded-2xl bg-zinc-950 text-zinc-100">
-					<div
-						aria-hidden
-						className="pointer-events-none absolute inset-0 opacity-[0.12]"
-						style={{
-							backgroundImage:
-								"radial-gradient(circle at 20% 0%, #f59e0b 0%, transparent 40%), radial-gradient(circle at 80% 100%, #10b981 0%, transparent 45%), radial-gradient(circle at 100% 0%, #a855f7 0%, transparent 50%)",
-						}}
-					/>
-					<div
-						aria-hidden
-						className="pointer-events-none absolute inset-0 opacity-[0.06]"
-						style={{
-							backgroundImage:
-								"linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-							backgroundSize: "28px 28px",
-						}}
-					/>
-
-					<button
-						type="button"
-						onClick={onClose}
-						aria-label="Close"
-						className="absolute right-3 top-3 z-10 inline-flex size-8 items-center justify-center rounded-full bg-white/5 text-zinc-400 transition hover:bg-white/10 hover:text-white"
-					>
-						<X className="size-4" />
-					</button>
-
-					<div className="relative min-h-0 flex-1 overflow-y-auto">
-						<div className="px-6 pt-7 sm:px-7">
-						<div className="mb-5 flex items-center gap-3">
-							<div className="relative">
-								<span
-									aria-hidden
-									className="absolute inset-0 -m-2 animate-ping rounded-full bg-rose-500/25"
-								/>
-								<span className="relative inline-flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-rose-500 to-fuchsia-600 shadow-[0_0_28px_-6px_rgba(244,63,94,0.7)]">
-									<Heart className="size-5 fill-white text-white" />
-								</span>
-							</div>
-							<div>
-								<h2
-									id="donation-modal-title"
-									className="text-lg font-semibold tracking-tight text-white"
-								>
-									Keep the streams alive
-								</h2>
-								<p className="text-xs text-zinc-400">
-									Zero ads. 24/7 servers. Powered by you.
-								</p>
-							</div>
+				<div className="min-h-0 flex-1 overflow-y-auto">
+					<div className="flex flex-col gap-1.5 px-6 pb-4 pt-6 text-left">
+						<div className="flex items-center gap-2">
+							<span className="inline-flex size-8 items-center justify-center rounded-full bg-rose-50 text-rose-600">
+								<Heart className="size-4" />
+							</span>
+							<h2
+								id="donation-modal-title"
+								className="text-lg font-semibold leading-none tracking-tight"
+							>
+								Support Pulse
+							</h2>
 						</div>
-
-						<p className="text-sm leading-relaxed text-zinc-300">
-							We work hard to bring you smooth, ad-free live matches. Our
-							servers stream around the clock so you never miss a moment — that
-							costs real money to keep online.
+						<p
+							id="donation-modal-description"
+							className="text-sm text-zinc-500"
+						>
+							Zero ads. 24/7 servers. Powered by you.
 						</p>
-						<p className="mt-2 text-sm leading-relaxed text-zinc-300">
-							If Pulse helped you today, chip in a{" "}
-							<span className="font-semibold text-white">dollar</span> — even a
-							few <span className="font-semibold text-white">cents</span> in
-							crypto keeps us going.
-						</p>
+					</div>
 
-						<div className="mt-5 flex flex-wrap gap-2">
-							<Pill icon={<ShieldCheck className="size-3" />} label="No ads" />
-							<Pill icon={<Zap className="size-3" />} label="Always on" />
-							<Pill icon={<Heart className="size-3" />} label="Community funded" />
-						</div>
+					<div className="space-y-4 px-6 pb-6">
+						<div className="space-y-2 text-sm leading-relaxed text-zinc-600">
+							<p>
+								We work hard to bring you smooth, ad-free live matches. Our
+								servers stream around the clock so you never miss a moment —
+								that costs real money to keep online.
+							</p>
+							<p>
+								If Pulse helped you today, chip in a{" "}
+								<span className="font-medium text-zinc-900">dollar</span> — even
+								a few <span className="font-medium text-zinc-900">cents</span>{" "}
+								in crypto keeps us going.
+							</p>
 						</div>
 
-						<div className="space-y-3 px-6 pb-6 pt-5 sm:px-7">
+						<div className="space-y-3">
 							{ASSETS.map((asset) => (
 								<CryptoCard key={asset.id} asset={asset} />
 							))}
 						</div>
 					</div>
+				</div>
 
-					<div className="relative flex items-center justify-between border-t border-white/5 bg-white/[0.02] px-6 py-3 sm:px-7">
-						<p className="text-[11px] text-zinc-500">
-							Send only {ASSETS.map((a) => a.ticker).join(" or ")} to the
-							matching address.
-						</p>
-						<button
-							type="button"
-							onClick={onClose}
-							className="text-xs font-medium text-zinc-400 transition hover:text-white"
-						>
-							Maybe later
-						</button>
-					</div>
+				<div className="flex items-center justify-between gap-3 border-t border-zinc-200 bg-zinc-50 px-6 py-3">
+					<p className="text-xs text-zinc-500">
+						Send only {ASSETS.map((a) => a.ticker).join(" or ")} to the matching
+						address.
+					</p>
+					<button
+						type="button"
+						onClick={onClose}
+						className="shrink-0 rounded-md px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:text-zinc-900"
+					>
+						Close
+					</button>
 				</div>
 			</div>
 		</div>,
 		document.body,
-	);
-}
-
-function Pill({
-	icon,
-	label,
-}: {
-	icon: React.ReactNode;
-	label: string;
-}) {
-	return (
-		<span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 text-[11px] font-medium text-zinc-300">
-			<span className="text-zinc-400">{icon}</span>
-			{label}
-		</span>
 	);
 }
 
@@ -294,36 +241,30 @@ function CryptoCard({ asset }: { asset: CryptoAsset }) {
 	}, [asset.address]);
 
 	return (
-		<div
-			className={`group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] p-4 transition-all duration-300 hover:border-white/20 hover:from-white/[0.06] ${asset.glow}`}
-		>
-			<div
-				aria-hidden
-				className={`pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-gradient-to-br ${asset.accent} opacity-10 blur-2xl transition-opacity duration-500 group-hover:opacity-20`}
-			/>
-
+		<div className="rounded-lg border border-zinc-200 bg-white p-4 transition-colors hover:bg-zinc-50">
 			<div className="flex items-start gap-3">
 				<span
-					className={`inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${asset.accent} text-white shadow-inner`}
+					className={`inline-flex size-9 shrink-0 items-center justify-center rounded-md ${asset.iconBg} ${asset.iconColor}`}
 				>
 					{asset.logo}
 				</span>
 				<div className="min-w-0 flex-1">
 					<div className="flex items-center gap-2">
-						<h3 className="text-sm font-semibold text-white">{asset.name}</h3>
-						<span className="rounded-md bg-white/5 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-300">
+						<h3 className="text-sm font-semibold text-zinc-900">
+							{asset.name}
+						</h3>
+						<span className="rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-600">
 							{asset.ticker}
 						</span>
 					</div>
-					<p className="text-[11px] text-zinc-500">{asset.network}</p>
+					<p className="text-xs text-zinc-500">{asset.network}</p>
 				</div>
-
-				<div className="hidden shrink-0 rounded-md border border-white/10 bg-white p-1.5 sm:block">
+				<div className="hidden shrink-0 rounded-md border border-zinc-200 bg-white p-1.5 sm:block">
 					<QRCodeSVG
 						value={asset.address}
-						size={64}
+						size={56}
 						bgColor="#ffffff"
-						fgColor="#0a0a0a"
+						fgColor="#18181b"
 						level="M"
 						marginSize={0}
 					/>
@@ -331,17 +272,17 @@ function CryptoCard({ asset }: { asset: CryptoAsset }) {
 			</div>
 
 			<div className="mt-3 flex items-center gap-2">
-				<code className="min-w-0 flex-1 truncate rounded-md border border-white/5 bg-black/40 px-2.5 py-2 font-mono text-[11px] text-zinc-300">
+				<code className="min-w-0 flex-1 truncate rounded-md border border-zinc-200 bg-zinc-50 px-2.5 py-2 font-mono text-[11px] text-zinc-700">
 					{asset.address}
 				</code>
 				<button
 					type="button"
 					onClick={handleCopy}
 					aria-label={`Copy ${asset.ticker} address`}
-					className={`relative inline-flex shrink-0 items-center gap-1.5 overflow-hidden rounded-md border px-2.5 py-2 text-xs font-medium transition-all duration-200 ${
+					className={`relative inline-flex shrink-0 items-center gap-1.5 overflow-hidden rounded-md border px-2.5 py-2 text-xs font-medium transition-colors ${
 						copied
-							? "border-emerald-400/40 bg-emerald-400/10 text-emerald-300"
-							: "border-white/10 bg-white/5 text-zinc-200 hover:border-white/20 hover:bg-white/10"
+							? "border-emerald-200 bg-emerald-50 text-emerald-700"
+							: "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
 					}`}
 				>
 					<span
@@ -364,13 +305,13 @@ function CryptoCard({ asset }: { asset: CryptoAsset }) {
 				</button>
 			</div>
 
-			<div className="mt-2 flex items-center justify-center sm:hidden">
-				<div className="rounded-md border border-white/10 bg-white p-2">
+			<div className="mt-3 flex items-center justify-center sm:hidden">
+				<div className="rounded-md border border-zinc-200 bg-white p-2">
 					<QRCodeSVG
 						value={asset.address}
 						size={112}
 						bgColor="#ffffff"
-						fgColor="#0a0a0a"
+						fgColor="#18181b"
 						level="M"
 						marginSize={0}
 					/>
