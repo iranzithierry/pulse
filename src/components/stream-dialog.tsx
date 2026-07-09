@@ -12,6 +12,7 @@ type StreamDialogProps = {
   loading: boolean;
   error: string | null;
   onClose: () => void;
+  onServerOpen?: () => void;
 };
 
 export function StreamDialog({
@@ -21,6 +22,7 @@ export function StreamDialog({
   loading,
   error,
   onClose,
+  onServerOpen,
 }: StreamDialogProps) {
   const [mounted, setMounted] = useState(false);
 
@@ -73,6 +75,7 @@ export function StreamDialog({
           loading={loading}
           error={error}
           onBack={onClose}
+          onServerOpen={onServerOpen}
           variant="dialog"
         />
       </div>
