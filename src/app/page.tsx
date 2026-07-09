@@ -2,9 +2,12 @@
 
 import { LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { DonationButton } from "@/components/donation-button";
+import { DonationModal } from "@/components/donation-modal";
 import { EventList } from "@/components/event-list";
 import { StreamDialog } from "@/components/stream-dialog";
 import { StreamPanel } from "@/components/stream-panel";
+import { useDonationPrompt } from "@/lib/use-donation-prompt";
 import type { StreamEvent, StreamServer } from "@/lib/types";
 import Image from "next/image";
 
@@ -17,6 +20,8 @@ export default function Home() {
   const [servers, setServers] = useState<StreamServer[]>([]);
   const [serversLoading, setServersLoading] = useState(false);
   const [serversError, setServersError] = useState<string | null>(null);
+
+  const donation = useDonationPrompt();
 
   const loadEvents = useCallback(async () => {
     setEventsLoading(true);
@@ -83,7 +88,7 @@ export default function Home() {
           <div className="flex items-center justify-center">
             <Image src="/logo.png" className="size-10" alt="Pulse" width={42} height={42} />
           </div>
-          <div>
+          <div className="min-w-0 flex-1">
             <h1 className="text-lg font-semibold tracking-tight text-zinc-900">
               Pulse - Live Streams
             </h1>
@@ -91,6 +96,7 @@ export default function Home() {
               Browse live matches and open stream servers
             </p>
           </div>
+          <DonationButton onClick={donation.openManually} />
         </div>
       </header>
 
@@ -122,6 +128,7 @@ export default function Home() {
                 loading={serversLoading}
                 error={serversError}
                 onBack={clearSelection}
+                onServerOpen={donation.registerServerOpen}
               />
             </div>
           </div>
@@ -135,7 +142,10 @@ export default function Home() {
         loading={serversLoading}
         error={serversError}
         onClose={clearSelection}
+        onServerOpen={donation.registerServerOpen}
       />
+
+      <DonationModal open={donation.open} onClose={donation.close} />
     </div>
   );
 }
