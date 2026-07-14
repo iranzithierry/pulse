@@ -15,7 +15,6 @@ type StreamPanelProps = {
 	loading: boolean;
 	error: string | null;
 	onBack: () => void;
-	onServerOpen?: () => void;
 	variant?: "panel" | "dialog";
 };
 
@@ -25,7 +24,6 @@ export function StreamPanel({
 	loading,
 	error,
 	onBack,
-	onServerOpen,
 	variant = "panel",
 }: StreamPanelProps) {
 	const sectionClassName =
@@ -87,10 +85,6 @@ export function StreamPanel({
 								target="_blank"
 								href={server.embedUrl}
 								key={server.id}
-								onClick={onServerOpen}
-								onAuxClick={(event) => {
-									if (event.button === 1) onServerOpen?.();
-								}}
 								className="flex w-full items-center gap-3 rounded-md border border-zinc-200 px-4 py-3 text-left transition hover:border-zinc-400 hover:bg-zinc-50"
 							>
 								<span className="flex size-8 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-zinc-600">
