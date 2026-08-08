@@ -22,7 +22,7 @@ function WatchContent() {
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
       <header className="flex items-center justify-between border-b border-zinc-800 px-4 py-3">
         <Link
-          href="/"
+          href="/p/x7k9qm2n"
           className="inline-flex items-center gap-2 text-sm text-zinc-300 transition hover:text-white"
         >
           <ArrowLeft className="size-4" />
