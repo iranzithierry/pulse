@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
 	try {
 		const parsed = new URL(url);
-		if (!parsed.hostname.endsWith("thestreameast.top")) {
+		if (!parsed.hostname.includes("streameast")) {
 			return NextResponse.json(
 				{ error: "Invalid source URL" },
 				{ status: 400 },
